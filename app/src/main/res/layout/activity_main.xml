@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ap_black"
+    tools:context=".MainActivity">
+
+
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/ecg_plot"
+        style="@style/APDefacto.Dark"
+        android:layout_width="1000dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+
+        app:borderColor="@color/ap_charcoal"
+        app:borderThickness="3dp"
+
+        app:domainLineColor="@color/ap_transparent"
+        app:domainOriginLineColor="@color/ap_transparent"
+        app:domainTitleVisible="false"
+        app:graphAnchor="left_bottom"
+        app:graphBackgroundColor="@color/ap_gray"
+        app:graphMarginBottom="-50dp"
+        app:graphMarginLeft="-30dp"
+        app:graphMarginRight="-80dp"
+        app:graphMarginTop="-50dp"
+        app:graphPaddingBottom="0dp"
+        app:graphPaddingLeft="0dp"
+        app:graphPaddingRight="0dp"
+        app:graphPaddingTop="0dp"
+
+        app:gridBackgroundColor="@color/ap_black"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:lineLabels=""
+        app:markupEnabled="false"
+        app:rangeLineColor="@color/ap_transparent"
+        app:rangeOriginLineColor="@color/ap_transparent"
+        app:rangeTitle=""
+        app:rangeTitleVisible="true"
+        app:renderMode="use_background_thread" />
+
+    <TextView
+        android:id="@+id/bpm_textView"
+        style="@android:style/Widget.TextView"
+        android:background="@drawable/textview_border"
+        android:layout_width="204dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="29dp"
+        android:gravity="center"
+        android:text="60 BPM"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#E40000"
+        android:textSize="56sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ecg_plot"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
