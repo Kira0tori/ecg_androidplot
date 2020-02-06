@@ -23,17 +23,17 @@ class MainActivity : Activity() {
 
     private var plot: XYPlot? = null
     private var redrawer: Redrawer? = Redrawer(plot,30f,false)
-    private var data_size = 2000
-
+    private var data_size = 1800
     private var mediaPlayer: MediaPlayer? = null
+    var beep_flag :Boolean = false
 
     public override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mediaPlayer = MediaPlayer.create(this,R.raw.ecg_beep)
-        mediaPlayer?.isLooping=true
+        mediaPlayer = MediaPlayer.create(this,R.raw.ecg_single_beep)
+        //mediaPlayer?.isLooping=true
         mediaPlayer?.start()
 
         plot = findViewById(R.id.ecg_plot)
@@ -64,7 +64,7 @@ class MainActivity : Activity() {
         redrawer = Redrawer(plot, 60f, true) //Android plot object to force a plot redrawn every x seconds
     }
 
-    class ECGModel internal constructor(size: Int, updateFreqHz: Int,values: List<Float> ) : XYSeries {
+    inner class ECGModel internal constructor(size: Int, updateFreqHz: Int,values: List<Float> ) : XYSeries {
 
         private val data: Array<Number> = Array(size) { 0 }
         private val delayMs: Long
@@ -72,9 +72,11 @@ class MainActivity : Activity() {
         private var keepRunning = true
         private var latestIndex = 0
         private var rendererRef: WeakReference<AdvancedLineAndPointRenderer?>? = null
+        private var upper_beep_threshold :Float = 1.0f
+        private var lower_beep_threshold :Float = 0.0f
 
         init {
-            var y :Int = 0
+            var y = 0
 
             for (i in data.indices) { data[i] = 0 }
             // translate hz into delay (ms):
@@ -88,6 +90,15 @@ class MainActivity : Activity() {
                             latestIndex = 0
                         }
                         data[latestIndex] = values[y]
+
+                        if(values[y] >= upper_beep_threshold && !beep_flag){
+                            beep_flag = true
+                            mediaPlayer?.start()
+                        }
+                        if(values[y] <= lower_beep_threshold && beep_flag) {
+                            beep_flag = false
+                        }
+
                         if(y == values.size-1){
                             y=0
                         }
@@ -108,7 +119,6 @@ class MainActivity : Activity() {
 
                     }
                 } catch (e: InterruptedException) {
-                    Log.i("DEBUG","catch")
                     keepRunning = false
                 }
             })
@@ -140,5 +150,6 @@ class MainActivity : Activity() {
     public override fun onStop() {
         super.onStop()
         redrawer!!.finish()
+        mediaPlayer?.release()
     }
 }
