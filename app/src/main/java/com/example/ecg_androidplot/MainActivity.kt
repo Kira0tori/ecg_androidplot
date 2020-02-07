@@ -37,7 +37,7 @@ class MainActivity : Activity() {
         mediaPlayer?.start()
 
         plot = findViewById(R.id.ecg_plot)
-        val content = object {}.javaClass.getResource("/res/raw/pattern3.txt")!!.readText()
+        val content = object {}.javaClass.getResource("/res/raw/pattern4.txt")!!.readText()
         Toast.makeText(applicationContext, "File loaded", Toast.LENGTH_SHORT).show()
         val content2 = content.split("\t").map { it.toFloat() } // ERROR
         //val series1 = SimpleXYSeries( content2, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,"Series1")
