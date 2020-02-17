@@ -87,7 +87,7 @@ class MainActivity : Activity() {
         private var start : Temporal? = Instant.now()
         private var finish : Temporal? = null
 
-        @SuppressLint("SetTextI18n") init {
+        init {
             var y = 0
 
             for (i in data.indices) { data[i] = 0 }
@@ -106,7 +106,8 @@ class MainActivity : Activity() {
                         if(values[y] >= upper_beep_threshold && !beep_flag){
                             finish = Instant.now()
                             timeElapsed = ((Duration.between(start, finish).toMillis().toDouble())/1000)*60
-                            bpm_textView.text = """${timeElapsed.roundToInt()} BPM"""
+                            val bpmString =  """${timeElapsed.roundToInt()} BPM"""
+                            bpm_textView.text = bpmString
                             start = Instant.now()
                             beep_flag = true
 
