@@ -1,5 +1,6 @@
 package com.example.ecg_androidplot
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Color
 import android.media.MediaPlayer
@@ -14,6 +15,13 @@ import com.androidplot.xy.*
 import java.lang.ref.WeakReference
 import kotlin.math.cos
 import kotlin.math.sin
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import kotlinx.android.synthetic.main.activity_main.*
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.Temporal
+import kotlin.math.roundToInt
 
 
 /**
@@ -55,7 +63,7 @@ class MainActivity : Activity() {
         plot!!.setDomainBoundaries(0, data_size, BoundaryMode.FIXED) // X axis boundaries
         plot!!.graph.position(0f,HorizontalPositioning.RELATIVE_TO_LEFT,0f,VerticalPositioning.RELATIVE_TO_TOP)
 
-        plot!!.rangeTitle.isVisible = false
+        plot!!.rangeTitle.isVisible = true
         plot!!.legend.isVisible = false
         plot!!.linesPerRangeLabel = 1  // reduce the number of range labels
 
@@ -75,7 +83,11 @@ class MainActivity : Activity() {
         private var upper_beep_threshold :Float = 1.0f
         private var lower_beep_threshold :Float = 0.0f
 
-        init {
+        private var timeElapsed = 0.0
+        private var start : Temporal? = Instant.now()
+        private var finish : Temporal? = null
+
+        @SuppressLint("SetTextI18n") init {
             var y = 0
 
             for (i in data.indices) { data[i] = 0 }
@@ -92,7 +104,12 @@ class MainActivity : Activity() {
                         data[latestIndex] = values[y]
 
                         if(values[y] >= upper_beep_threshold && !beep_flag){
+                            finish = Instant.now()
+                            timeElapsed = ((Duration.between(start, finish).toMillis().toDouble())/1000)*60
+                            bpm_textView.text = """${timeElapsed.roundToInt()} BPM"""
+                            start = Instant.now()
                             beep_flag = true
+
                             mediaPlayer?.start()
                         }
                         if(values[y] <= lower_beep_threshold && beep_flag) {
