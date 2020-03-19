@@ -168,6 +168,6 @@ class MainActivity : Activity() {
     public override fun onStop() {
         super.onStop()
         redrawer!!.finish()
-        mediaPlayer?.release()
+        mediaPlayer?.release()//
     }
 }
